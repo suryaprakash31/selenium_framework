@@ -6,11 +6,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class LoginPage {
-
-    // The browser and the waiter. The page needs them to do its work.
-    WebDriver driver;
-    WebDriverWait wait;
+public class LoginPage extends BasePage {
 
     // The "phone numbers": locators, saved ONCE.
     By usernameField = By.name("username");
@@ -21,8 +17,7 @@ public class LoginPage {
     // The constructor: when someone writes "new LoginPage(driver)",
     // the page receives the browser and remembers it.
     public LoginPage(WebDriver driver) {
-        this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+        super(driver);
     }
 
     // Action 1: log in. Same 3 steps as before, now in one place.
