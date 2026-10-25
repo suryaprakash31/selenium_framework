@@ -13,94 +13,52 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-public class UserManagementTest {
+import com.qa.pages.AdminPage;
+import com.qa.pages.LoginPage;
+import com.qa.pages.MenuPage;
 
-    WebDriver driver;
-    WebDriverWait wait;
+public class UserManagementTest extends BaseTest {
 
-    By recordsText = By.xpath("//*[contains(normalize-space(.),'Records Found') and not(*)]");
-    By tableRows = By.cssSelector(".oxd-table-body .oxd-table-card");
-    By roleDropdown = By.xpath(
-            "//label[text()='User Role']/parent::div/following-sibling::div//div[contains(@class,'oxd-select-text-input')]");
+    LoginPage loginPage;
+    MenuPage menuPage;
+    AdminPage adminPage;
 
-    @BeforeMethod
-    public void setUp() {
-        driver = new ChromeDriver();
-        wait = new WebDriverWait(driver, Duration.ofSeconds(15));
-        driver.get("https://opensource-demo.orangehrmlive.com");
+    @BeforeMethod 
+    public void createPagesAndOpenAdmin(){
+        loginPage = new LoginPage(driver);
+        menuPage = new MenuPage(driver);
+        adminPage = new AdminPage(driver);
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("username"))).sendKeys("Admin");
-        driver.findElement(By.name("password")).sendKeys("admin123");
-        driver.findElement(By.cssSelector("button[type='submit']")).click();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.cssSelector(".oxd-topbar-header-breadcrumb-module")));
-
-        openMenu("Admin");
-        wait.until(ExpectedConditions.visibilityOfElementLocated(recordsText));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(tableRows));
+        loginPage.login("Admin", "admin123");
+        menuPage.openMenu("Admin");
+        adminPage.waitForTable();
     }
 
-    void openMenu(String menuName) {
-        By menuItem = By.xpath("//a[contains(@class,'oxd-main-menu-item')]//span[text()='" + menuName + "']");
-        wait.until(ExpectedConditions.elementToBeClickable(menuItem)).click();
-    }
-
-    void selectFromDropdown(By dropdown, String optionText) {
-        wait.until(ExpectedConditions.elementToBeClickable(dropdown)).click();
-        By option = By.xpath("//div[@role='listbox']//span[text()='" + optionText + "']");
-        wait.until(ExpectedConditions.elementToBeClickable(option)).click();
-    }
-
-    @Test
-    public void tc05_searchByUsername() {
-        String before = driver.findElement(recordsText).getText();
-
-        driver.findElement(By.xpath("//label[text()='Username']/parent::div/following-sibling::div/input"))
-                .sendKeys("Admin");
-        driver.findElement(By.cssSelector("button[type='submit']")).click();
-
-        wait.until(ExpectedConditions.not(ExpectedConditions.textToBe(recordsText, before)));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(tableRows));
-
-        List<WebElement> rows = driver.findElements(tableRows);
-        Assert.assertTrue(rows.size() > 0, "No rows found after search");
-
-        for (WebElement row : rows) {
-            Assert.assertTrue(row.getText().toLowerCase().contains("admin"),
-                    "Row does not contain 'admin': " + row.getText());
+    @Test 
+    public void tc05_SearchByUsername(){
+        adminPage.searchByUsername("Admin");
+        List<String> rows = adminPage.getRowTexts();
+        Assert.assertTrue(rows.size()>0,"no rows found after search");
+        for (String rowText: rows){
+            Assert.assertTrue(rowText.toLowerCase().contains("admin"), "Row doesnt contain 'admim'" + rowText);
         }
     }
 
-    @Test
-    public void tc06_filterByUserRole() {
-        String before = driver.findElement(recordsText).getText();
-
-        selectFromDropdown(roleDropdown, "ESS");
-        driver.findElement(By.cssSelector("button[type='submit']")).click();
-
-        wait.until(ExpectedConditions.not(ExpectedConditions.textToBe(recordsText, before)));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(tableRows));
-
-        List<WebElement> rows = driver.findElements(tableRows);
-        Assert.assertTrue(rows.size() > 0, "No rows found after filtering");
-
-        for (WebElement row : rows) {
-            String role = row.findElements(By.cssSelector(".oxd-table-cell")).get(2).getText();
+    @Test 
+    public void tc06_filterByUserRole(){
+        adminPage.filterByRole("ESS");
+        List<String> roles = adminPage.getRoles();
+        Assert.assertTrue(roles.size()>0, "No roles found after fitering");
+        for(String role : roles){
             Assert.assertEquals(role, "ESS");
         }
     }
 
-    @Test
-    public void tc07_tableHasRowsAndCount() {
-        String count = driver.findElement(recordsText).getText();
-        Assert.assertTrue(count.contains("Found"), "Records Found text missing: " + count);
-
-        List<WebElement> rows = driver.findElements(tableRows);
-        Assert.assertTrue(rows.size() > 0, "Users table has no rows");
+    @Test 
+    public void tc07_tableHasRowsAndCount(){
+        Assert.assertTrue(adminPage.getRecordsText().contains("Found"), "Records Found Text Missing");
+        Assert.assertTrue(adminPage.getRowTexts().size()>0, "user table has no rows");
     }
 
-    @AfterMethod
-    public void tearDown() {
-        driver.quit();
-    }
+   
 }

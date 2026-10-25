@@ -12,58 +12,38 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-public class NavigationTest {
+import com.qa.pages.DashboardPage;
+import com.qa.pages.LoginPage;
+import com.qa.pages.MenuPage;
 
-    WebDriver driver;
-    WebDriverWait wait;
+public class NavigationTest extends BaseTest {
+
+    LoginPage loginPage;
+    MenuPage menuPage;
     
     @BeforeMethod 
-    public void setUp(){
-        driver = new ChromeDriver();
-        wait = new WebDriverWait(driver, Duration.ofSeconds(15));
-        driver.get("https://opensource-demo.orangehrmlive.com");
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("username"))).sendKeys("Admin");
-        driver.findElement(By.name("password")).sendKeys("admin123");
-        driver.findElement(By.cssSelector("button[type='submit']")).click();
-
-        wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.cssSelector(".oxd-topbar-header-breadcrumb-module")));
-    }
-
-    void openMenu(String menuName){
-        By menuItem = By.xpath("//a[contains(@class,'oxd-main-menu-item')]//span[text()='" + menuName + "']");
-        wait.until(ExpectedConditions.elementToBeClickable(menuItem)).click();
+    public void createPagesAndLogin(){
+        loginPage = new LoginPage(driver);
+        menuPage = new MenuPage(driver);
+        loginPage.login("Admin", "admin123");
     }
 
     @Test 
     public void tc03_openAdminPage(){
-        openMenu("Admin");
-        wait.until(ExpectedConditions.urlContains("admin"));
-        String heading = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".oxd-topbar-header-breadcrumb-module"))).getText();
-        Assert.assertEquals(heading, "Admin");
+        menuPage.openMenu("Admin");
+        Assert.assertEquals(menuPage.getHeading(), "Admin");
     }
 
     @Test 
     public void tc04_openPimPage(){
-        openMenu("PIM");
-        wait.until(ExpectedConditions.urlContains("pim"));
-        String heading = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.cssSelector(".oxd-topbar-header-breadcrumb-module"))).getText();
-        Assert.assertEquals(heading, "PIM");
+        menuPage.openMenu("PIM");
+        Assert.assertEquals(menuPage.getHeading(), "PIM");
     }
 
     @Test 
     public void tc05_openLeavePage(){
-        openMenu("Leave");
-        wait.until(ExpectedConditions.urlContains("leave"));
-        String heading = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.cssSelector(".oxd-topbar-header-breadcrumb-module"))).getText();
-        Assert.assertEquals(heading, "Leave");
-    }
-
-    @AfterMethod
-    public void tearDown() {
-        driver.quit();
+        menuPage.openMenu("Leave");
+        Assert.assertEquals(menuPage.getHeading(), "Leave");
     }
     
 }

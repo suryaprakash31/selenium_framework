@@ -12,48 +12,34 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-public class EmployeeTest {
+import com.qa.pages.AdminPage;
+import com.qa.pages.EmployeePage;
+import com.qa.pages.LoginPage;
+import com.qa.pages.MenuPage;
 
-    WebDriver driver;
-    WebDriverWait wait;
+public class EmployeeTest extends BaseTest {
+
+    LoginPage loginPage;
+    MenuPage menuPage;
+    EmployeePage employeePage;
 
     @BeforeMethod 
-    public void setUp(){
-        driver = new ChromeDriver();
-        wait = new WebDriverWait(driver, Duration.ofSeconds(30));
-        driver.get("https://opensource-demo.orangehrmlive.com");
+    public void createPagesaAndOpenPIM(){
+        loginPage = new LoginPage(driver);
+        menuPage = new MenuPage(driver);
+        employeePage = new EmployeePage(driver);
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("username"))).sendKeys("Admin");
-        driver.findElement(By.name("password")).sendKeys("admin123");
-        driver.findElement(By.cssSelector("button[type='submit']")).click();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.cssSelector(".oxd-topbar-header-breadcrumb-module")));
-    }
-
-    void openMenu(String menuName){
-        By menuItem = By.xpath("//a[contains(@class,'oxd-main-menu-item')]//span[text()='" + menuName + "']");
-        wait.until(ExpectedConditions.elementToBeClickable(menuItem)).click();
+        loginPage.login("Admin", "admin123");
+        menuPage.openMenu("PIM");
     }
 
     @Test 
     public void tc08_addEmployee(){
-        openMenu("PIM");
-        wait.until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//a[normalize-space()='Add Employee']"))).click();
-
+        employeePage.openaddEmployee();
         String lastName = "Auto" + System.currentTimeMillis();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("firstName"))).sendKeys("Test");
-        driver.findElement(By.name("lastName")).sendKeys(lastName);
-        driver.findElement(By.cssSelector("button[type='submit']")).click();
-
-        String message = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.cssSelector(".oxd-toast"))).getText();
+        employeePage.addEmployee("Test", lastName);
+        String message = employeePage.getToastMessage();
         Assert.assertTrue(message.contains("Successfully Saved"), "Unexpected message: " + message);
     }
 
-    @AfterMethod 
-    public void tearDown(){
-        driver.quit();
-    }
-    
 }

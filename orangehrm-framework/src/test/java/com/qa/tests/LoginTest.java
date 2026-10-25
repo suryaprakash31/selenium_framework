@@ -16,20 +16,15 @@ import org.testng.annotations.Test;
 import com.qa.pages.DashboardPage;
 import com.qa.pages.LoginPage;
 
-public class LoginTest {
+public class LoginTest extends BaseTest {
 
-    WebDriver driver;
-    WebDriverWait wait;
     LoginPage loginPage;
     DashboardPage dashboardPage;
     
     @BeforeMethod
-    public void setUp(){
-        driver = new ChromeDriver();
-        wait = new WebDriverWait (driver, Duration.ofSeconds(15));
+    public void createPages(){
         loginPage = new LoginPage(driver);
         dashboardPage = new DashboardPage(driver);
-        driver.get("https://opensource-demo.orangehrmlive.com");
     } 
 
     @Test 
@@ -42,11 +37,6 @@ public class LoginTest {
     public void tc02_invalidLogin(){
         loginPage.login("Admin", "Wrong_Password");
         Assert.assertEquals(loginPage.getErrorMessage(),"Invalid credentials");
-    }
-
-    @AfterMethod 
-    public void tearDown(){
-        driver.quit();
     }
 
 }
