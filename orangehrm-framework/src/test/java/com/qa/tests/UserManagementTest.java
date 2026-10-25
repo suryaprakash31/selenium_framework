@@ -1,15 +1,7 @@
 package com.qa.tests;
 
-import java.time.Duration;
 import java.util.List;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -35,7 +27,7 @@ public class UserManagementTest extends BaseTest {
     }
 
     @Test 
-    public void tc05_SearchByUsername(){
+    public void tc06_SearchByUsername(){
         adminPage.searchByUsername("Admin");
         List<String> rows = adminPage.getRowTexts();
         Assert.assertTrue(rows.size()>0,"no rows found after search");
@@ -45,7 +37,7 @@ public class UserManagementTest extends BaseTest {
     }
 
     @Test 
-    public void tc06_filterByUserRole(){
+    public void tc07_filterByUserRole(){
         adminPage.filterByRole("ESS");
         List<String> roles = adminPage.getRoles();
         Assert.assertTrue(roles.size()>0, "No roles found after fitering");
@@ -55,7 +47,7 @@ public class UserManagementTest extends BaseTest {
     }
 
     @Test 
-    public void tc07_tableHasRowsAndCount(){
+    public void tc08_tableHasRowsAndCount(){
         Assert.assertTrue(adminPage.getRecordsText().contains("Found"), "Records Found Text Missing");
         Assert.assertTrue(adminPage.getRowTexts().size()>0, "user table has no rows");
     }
