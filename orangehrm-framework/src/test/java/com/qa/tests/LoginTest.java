@@ -2,6 +2,7 @@ package com.qa.tests;
 
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.qa.pages.DashboardPage;
@@ -24,9 +25,19 @@ public class LoginTest extends BaseTest {
         Assert.assertEquals(dashboardPage.getHeading(), "Dashboard");
     }
 
-    @Test 
-    public void tc02_invalidLogin(){
-        loginPage.login("Admin", "Wrong_Password");
+    @DataProvider(name = "invalidLoginData")
+    public Object[][] invalidLoginData(){
+        return new Object[][]{
+            {"Admin", "wrongPassword"},
+            {"WrongUser", "admin123"},
+            {"WrongUser", "wrongPassword"}
+
+        };
+    }
+
+    @Test (dataProvider = "invalidLoginData")
+    public void tc02_invalidLogin(String username, String password){
+        loginPage.login(username, password);
         Assert.assertEquals(loginPage.getErrorMessage(),"Invalid credentials");
     }
 

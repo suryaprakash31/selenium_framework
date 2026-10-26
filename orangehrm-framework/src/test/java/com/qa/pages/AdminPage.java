@@ -70,7 +70,6 @@ public class AdminPage extends BasePage {
     }
 
     private void waitForRefresh(String before) {
-        // TODO Auto-generated method stub
         wait.until(ExpectedConditions.not(ExpectedConditions.textToBe(recordsText, before)));
         wait.until(ExpectedConditions.visibilityOfElementLocated(tableRows));
     }
