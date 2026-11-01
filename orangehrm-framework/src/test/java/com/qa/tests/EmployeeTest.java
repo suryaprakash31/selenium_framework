@@ -1,12 +1,16 @@
 package com.qa.tests;
 
+import java.io.IOException;
+
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.qa.pages.EmployeePage;
 import com.qa.pages.LoginPage;
 import com.qa.pages.MenuPage;
+import com.qa.utils.ExcelUtils;
 
 public class EmployeeTest extends BaseTest {
 
@@ -24,13 +28,17 @@ public class EmployeeTest extends BaseTest {
         menuPage.openMenu("PIM");
     }
 
-    @Test 
-    public void tc09_addEmployee(){
+    @DataProvider (name = "employeeData")
+    public Object [][] employeeData() throws IOException{
+        return ExcelUtils.getSheetData("src/test/resources/testdata/EmployeeData.xlsx", "Employees");
+    }
+
+    @Test (dataProvider = "employeeData" )
+    public void tc09_addEmployee(String firstName, String lastName, String expextedMessage){
         employeePage.openaddEmployee();
-        String lastName = "Auto" + System.currentTimeMillis();
-        employeePage.addEmployee("Test", lastName);
+        employeePage.addEmployee(firstName, lastName);
         String message = employeePage.getToastMessage();
-        Assert.assertTrue(message.contains("Successfully Saved"), "Unexpected message: " + message);
+        Assert.assertTrue(message.contains(expextedMessage), "Unexpected message: " + message);
     }
 
 }
