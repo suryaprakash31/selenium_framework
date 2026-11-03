@@ -1,7 +1,7 @@
 package com.qa.stepdefs;
 
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+import com.qa.utils.DriverFactory;
 import org.testng.Assert;
 
 import com.qa.pages.DashboardPage;
@@ -22,7 +22,7 @@ public class LoginSteps {
     // Hook: runs before every scenario
     @Before
     public void startBrowser() {
-        driver = new ChromeDriver();
+        driver = DriverFactory.createDriver();
         loginPage = new LoginPage(driver);
         dashboardPage = new DashboardPage(driver);
     }

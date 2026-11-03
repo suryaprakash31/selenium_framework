@@ -5,12 +5,14 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
+import com.qa.utils.DriverFactory;
+
 public class BaseTest {
 
     WebDriver driver;
     @BeforeMethod
     public void setUp() {
-        driver = new ChromeDriver();
+        driver = DriverFactory.createDriver();
         driver.get("https://opensource-demo.orangehrmlive.com");
     }
 
