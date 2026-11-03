@@ -47,4 +47,9 @@ public class LoginSteps {
     public void the_dashboard_heading_should_be(String expectedHeading) {
         Assert.assertEquals(dashboardPage.getHeading(), expectedHeading);
     }
+
+        @Then("the user should see the error message {string}")
+    public void the_user_should_see_the_error_message(String expectedMessage) {
+        Assert.assertEquals(loginPage.getErrorMessage(), expectedMessage);
+    }
 }
