@@ -1,6 +1,8 @@
 package com.qa.stepdefs;
 
 import org.openqa.selenium.WebDriver;
+
+import com.qa.utils.ConfigReader;
 import com.qa.utils.DriverFactory;
 import org.testng.Assert;
 
@@ -35,7 +37,7 @@ public class LoginSteps {
 
     @Given("the user is on the login page")
     public void the_user_is_on_the_login_page() {
-        driver.get("https://opensource-demo.orangehrmlive.com");
+        driver.get(ConfigReader.get("baseUrl"));
     }
 
     @When("the user logs in with username {string} and password {string}")
