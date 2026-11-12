@@ -8,6 +8,10 @@ import org.testng.Assert;
 
 import com.qa.pages.DashboardPage;
 import com.qa.pages.LoginPage;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import com.qa.utils.ScreenshotUtils;
+import io.cucumber.java.Scenario;
 
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
@@ -31,7 +35,12 @@ public class LoginSteps {
 
     // Hook: runs after every scenario
     @After
-    public void closeBrowser() {
+    public void closeBrowser(Scenario scenario) {
+        if (scenario.isFailed()) {
+            byte[] picture = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+            scenario.attach(picture, "image/png", "Failure screenshot");
+            ScreenshotUtils.takeScreenshot(driver, scenario.getName().replaceAll("[^a-zA-Z0-9]", "_"));
+        }
         driver.quit();
     }
 
