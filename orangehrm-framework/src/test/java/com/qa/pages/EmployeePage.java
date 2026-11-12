@@ -11,6 +11,7 @@ public class EmployeePage extends BasePage {
     By lastNameInput = By.name("lastName");
     By saveButton = By.cssSelector("button[type='submit']");
     By toast = By.cssSelector(".oxd-toast");
+    By formLoader = By.cssSelector(".oxd-form-loader");
 
     public EmployeePage(WebDriver driver) {
         super(driver);
@@ -23,6 +24,7 @@ public class EmployeePage extends BasePage {
     public void addEmployee(String firstname, String lastName){
         wait.until(ExpectedConditions.visibilityOfElementLocated(firstNameInput)).sendKeys(firstname);
         driver.findElement(lastNameInput).sendKeys(lastName);
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(formLoader));
         driver.findElement(saveButton).click();
 
     }

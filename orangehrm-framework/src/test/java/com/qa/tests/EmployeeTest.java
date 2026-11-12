@@ -24,7 +24,7 @@ public class EmployeeTest extends BaseTest {
         menuPage = new MenuPage(driver);
         employeePage = new EmployeePage(driver);
 
-        loginPage.login("Admin", "admin123");
+        loginPage.loginAsDefaultUser();
         menuPage.openMenu("PIM");
     }
 

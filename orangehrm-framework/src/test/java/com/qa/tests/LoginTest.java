@@ -24,7 +24,7 @@ public class LoginTest extends BaseTest {
 
     @Test 
     public void tc01_validLogin(){
-        loginPage.login("Admin", "admin123");
+        loginPage.loginAsDefaultUser();
         Assert.assertEquals(dashboardPage.getHeading(), "Dashboard");
     }
 

@@ -21,7 +21,7 @@ public class UserManagementTest extends BaseTest {
         menuPage = new MenuPage(driver);
         adminPage = new AdminPage(driver);
 
-        loginPage.login("Admin", "admin123");
+        loginPage.loginAsDefaultUser();
         menuPage.openMenu("Admin");
         adminPage.waitForTable();
     }

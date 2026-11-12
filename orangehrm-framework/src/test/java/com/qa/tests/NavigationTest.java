@@ -16,7 +16,7 @@ public class NavigationTest extends BaseTest {
     public void createPagesAndLogin(){
         loginPage = new LoginPage(driver);
         menuPage = new MenuPage(driver);
-        loginPage.login("Admin", "admin123");
+        loginPage.loginAsDefaultUser();
     }
 
     @Test 

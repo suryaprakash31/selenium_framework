@@ -7,6 +7,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import com.qa.utils.ConfigReader;
+
 public class BasePage {
 
     WebDriver driver;
@@ -16,7 +18,7 @@ public class BasePage {
 
     public BasePage(WebDriver driver){
         this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(ConfigReader.getInt("timeout")));
     }
 
     // The action: wait for the heading, read it, and hand the text back.
