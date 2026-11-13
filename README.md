@@ -42,3 +42,7 @@ Run all commands from the `orangehrm-framework` folder.
 ## Local settings
 Machine-specific settings (for example a driver path) go in
 `src/test/resources/config.local.properties`. That file is not committed.
+
+
+## Test scenarios
+The scenarios covered by this framework are listed in [docs/test-scenarios.md](docs/test-scenarios.md).
