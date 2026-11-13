@@ -8,12 +8,19 @@ public class ConfigReader {
 
     private static Properties properties = new Properties();
 
-    // This block runs once, the first time anyone uses ConfigReader
+    // Runs once: load the shared file, then the local one (which overrides it)
     static {
-        try (FileInputStream file = new FileInputStream("src/test/resources/config.properties")) {
+        loadFile("src/test/resources/config.properties", true);
+        loadFile("src/test/resources/config.local.properties", false);
+    }
+
+    private static void loadFile(String path, boolean required) {
+        try (FileInputStream file = new FileInputStream(path)) {
             properties.load(file);
         } catch (IOException e) {
-            throw new RuntimeException("Could not read config.properties", e);
+            if (required) {
+                throw new RuntimeException("Could not read " + path, e);
+            }
         }
     }
 

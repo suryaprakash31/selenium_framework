@@ -1,4 +1,8 @@
 *.class
 target/
-screenshots/
 *.png
+config.local.properties
+.vscode/
+.settings/
+.classpath
+.project
